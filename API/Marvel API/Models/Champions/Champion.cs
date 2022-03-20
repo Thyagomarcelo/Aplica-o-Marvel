@@ -23,5 +23,6 @@ namespace Marvel_API.Models.Champions
         public virtual Stats stats { get; set; }
         public virtual List<Spells> spells { get; set; }
         public virtual Passive passive { get; set; }
+        public virtual List<Skins> skins { get; set; }
     }
 }

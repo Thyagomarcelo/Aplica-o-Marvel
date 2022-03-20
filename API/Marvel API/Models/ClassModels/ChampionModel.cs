@@ -22,5 +22,6 @@ namespace Marvel_API.Models.ClassModels
         public Stats stats { get; set; }
         public List<Spells> spells { get; set; }
         public Passive passive { get; set; }
+        public List<Skins> skins { get; set; }
     }
 }

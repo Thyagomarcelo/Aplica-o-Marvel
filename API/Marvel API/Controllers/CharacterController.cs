@@ -44,5 +44,17 @@ namespace Marvel_API.Controllers
                 error = false,
             });
         }
+
+        [HttpGet]
+        public JsonResult getChampionDetails(string championId)
+        {
+
+
+            return Json(new
+            {
+                Data = _characterService.getChampionDetails(championId),
+                Error = false
+            });
+        }
     }
 }

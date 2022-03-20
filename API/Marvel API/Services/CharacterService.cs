@@ -18,15 +18,15 @@ namespace Marvel_API.Services
 {
     public class CharacterService : ICharacterService
     {
-        private GenericRepository<Champion> _repChampion;
-        private GenericRepository<Champions> _repChampions;
+        private CharacterRepository _repChampion;
+       // private CharacterRepository<Champions> _repChampions;
         private readonly ApplicationDbContext dbContext;
         
         public CharacterService(ApplicationDbContext context)
         {
             dbContext = context;
-            _repChampion = new GenericRepository<Champion>(context);
-            _repChampions = new GenericRepository<Champions>(context);
+            _repChampion = new CharacterRepository(context);
+            //_repChampions = new CharacterRepository<Champions>(context);
         }
 
         public string saveAllCharactersInBD(string stringChampions)
@@ -77,6 +77,14 @@ namespace Marvel_API.Services
             return listChampionsFilter;
         }
 
+        public Champion getChampionDetails(string championId)
+        {
+
+            Champion championDetails = _repChampion.getById(championId);
+
+            return championDetails;
+        }
+
         private ChampionFilter convertChampionContextToChampionFilter(Champion champion)
         {
             ChampionFilter championFilter = new ChampionFilter();
@@ -110,6 +118,7 @@ namespace Marvel_API.Services
             championContext.spells = championModel.spells;
             championContext.stats = championModel.stats;
             championContext.title = championModel.title;
+            championContext.skins = championModel.skins;
 
             foreach(var allytip in championModel.allytips)
             {

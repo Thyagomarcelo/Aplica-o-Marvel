@@ -23,26 +23,6 @@ namespace Marvel_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "imageSpells",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    full = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    sprite = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    group = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    x = table.Column<double>(type: "float", nullable: false),
-                    y = table.Column<double>(type: "float", nullable: false),
-                    w = table.Column<double>(type: "float", nullable: false),
-                    h = table.Column<double>(type: "float", nullable: false),
-                    SpellsId = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_imageSpells", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "allytypes",
                 columns: table => new
                 {
@@ -1243,6 +1223,48 @@ namespace Marvel_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Skins",
+                columns: table => new
+                {
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    num = table.Column<int>(type: "int", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    chromas = table.Column<bool>(type: "bit", nullable: false),
+                    ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Skins", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Skins_Champion_ChampionId",
+                        column: x => x.ChampionId,
+                        principalTable: "Champion",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "spells",
+                columns: table => new
+                {
+                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    tooltip = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_spells", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_spells_Champion_ChampionId",
+                        column: x => x.ChampionId,
+                        principalTable: "Champion",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Stats",
                 columns: table => new
                 {
@@ -1302,34 +1324,6 @@ namespace Marvel_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "spells",
-                columns: table => new
-                {
-                    id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    tooltip = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    imageId = table.Column<int>(type: "int", nullable: true),
-                    ChampionId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_spells", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_spells_Champion_ChampionId",
-                        column: x => x.ChampionId,
-                        principalTable: "Champion",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_spells_image_imageId",
-                        column: x => x.imageId,
-                        principalTable: "image",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "imagePassive",
                 columns: table => new
                 {
@@ -1353,6 +1347,32 @@ namespace Marvel_API.Migrations
                         principalTable: "passive",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "imageSpells",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    full = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    sprite = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    group = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    x = table.Column<double>(type: "float", nullable: false),
+                    y = table.Column<double>(type: "float", nullable: false),
+                    w = table.Column<double>(type: "float", nullable: false),
+                    h = table.Column<double>(type: "float", nullable: false),
+                    SpellsId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_imageSpells", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_imageSpells_spells_SpellsId",
+                        column: x => x.SpellsId,
+                        principalTable: "spells",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -2149,6 +2169,13 @@ namespace Marvel_API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_imageSpells_SpellsId",
+                table: "imageSpells",
+                column: "SpellsId",
+                unique: true,
+                filter: "[SpellsId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_info_ChampionId",
                 table: "info",
                 column: "ChampionId",
@@ -2163,14 +2190,14 @@ namespace Marvel_API.Migrations
                 filter: "[ChampionId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_spells_ChampionId",
-                table: "spells",
+                name: "IX_Skins_ChampionId",
+                table: "Skins",
                 column: "ChampionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_spells_imageId",
+                name: "IX_spells_ChampionId",
                 table: "spells",
-                column: "imageId");
+                column: "ChampionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Stats_ChampionId",
@@ -2197,6 +2224,9 @@ namespace Marvel_API.Migrations
                 name: "enemyytypes");
 
             migrationBuilder.DropTable(
+                name: "image");
+
+            migrationBuilder.DropTable(
                 name: "imagePassive");
 
             migrationBuilder.DropTable(
@@ -2206,7 +2236,7 @@ namespace Marvel_API.Migrations
                 name: "info");
 
             migrationBuilder.DropTable(
-                name: "spells");
+                name: "Skins");
 
             migrationBuilder.DropTable(
                 name: "Stats");
@@ -2218,7 +2248,7 @@ namespace Marvel_API.Migrations
                 name: "passive");
 
             migrationBuilder.DropTable(
-                name: "image");
+                name: "spells");
 
             migrationBuilder.DropTable(
                 name: "Champion");

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Marvel_API.Repository
 {
 
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public abstract class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private ApplicationDbContext _context;
         private DbSet<T> table = null;
@@ -20,16 +20,10 @@ namespace Marvel_API.Repository
             table = _context.Set<T>();
         }
 
-        public GenericRepository()
-        {
-            this._context = new ApplicationDbContext();
-            table = _context.Set<T>();
-        }
-
 
         public IEnumerable<T> GetAll()
         {
-            return table.Include("image").ToList();
+            return table.ToList();
         }
         public T GetById(object id)
         {

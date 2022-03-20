@@ -8,5 +8,6 @@ namespace Marvel_API.Controllers
     {
         public string saveAllCharactersInBD(string champion);
         List<ChampionFilter> getAllCharacters();
+        Champion getChampionDetails(string championId);
     }
 }
